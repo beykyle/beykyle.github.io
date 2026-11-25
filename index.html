@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kyle Beyer — computational nuclear physics, FRIB</title>
+<meta name="description" content="Kyle Beyer is a computational physicist and postdoc at FRIB / Michigan State University, building GPU-accelerated reaction and structure solvers, emulators, and Bayesian uncertainty-quantified optical potentials for rare isotopes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F7F5;
+    --ink:#1C2730;
+    --ink-2:#4A5760;
+    --rule:#C7CFCA;
+    --teal:#0E6B66;
+    --measure:62ch;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#141A1E; --ink:#E6EAE7; --ink-2:#A3AEA9; --rule:#33404A;
+      --teal:#5BBFB6;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Serif", Georgia, "Times New Roman", serif;
+    font-size:17px; line-height:1.65;
+  }
+  a{color:var(--teal); text-decoration:none; border-bottom:1px solid var(--rule)}
+  a:hover{border-bottom-color:var(--teal)}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--teal); outline-offset:3px; border-radius:2px}
+  code{font-family:"IBM Plex Mono", ui-monospace, Menlo, monospace; font-size:.9em}
+
+  .page{display:grid; grid-template-columns:200px minmax(0,1fr); gap:56px; max-width:1040px; margin:0 auto; padding:56px 28px 96px}
+  nav{position:sticky; top:48px; align-self:start}
+  nav .name{font-weight:600; font-size:1.05rem; margin:0 0 4px}
+  nav .aff{color:var(--ink-2); font-size:.92rem; margin:0 0 28px; line-height:1.4}
+  nav ul{list-style:none; padding:0; margin:0}
+  nav li{margin:0 0 8px}
+  nav li a{border:0; color:var(--ink-2)}
+  nav li a:hover, nav li a[aria-current]{color:var(--teal)}
+  nav .ext{margin-top:28px; padding-top:20px; border-top:1px solid var(--rule); font-size:.92rem}
+  nav .ext a{display:block; margin-bottom:6px}
+
+  main{max-width:var(--measure)}
+  section{padding:0 0 64px}
+  h1{font-size:2rem; font-weight:500; line-height:1.2; margin:0 0 20px; letter-spacing:-.01em}
+  h2{font-size:1.45rem; font-weight:500; margin:0 0 20px; letter-spacing:-.005em}
+  h3{font-size:1.05rem; font-weight:600; margin:32px 0 6px}
+  p{margin:0 0 16px}
+  .lede{font-size:1.15rem; line-height:1.55; color:var(--ink)}
+  .muted{color:var(--ink-2)}
+
+  /* hero figure: reaction-zoom film */
+  .hero{margin:8px 0 36px}
+  .hero video{display:block; width:100%; height:auto; aspect-ratio:16/9; border-radius:4px; background:#0b0f14; object-fit:cover}
+
+  /* software list as a definition list, not cards */
+  dl{margin:0}
+  dl div{display:grid; grid-template-columns:150px 1fr; gap:16px; padding:14px 0; border-top:1px solid var(--rule)}
+  dl div:last-child{border-bottom:1px solid var(--rule)}
+  dt{margin:0}
+  dt code{font-size:.95rem; font-weight:500; color:var(--ink); overflow-wrap:anywhere}
+  dd{margin:0}
+
+  .talk{padding:14px 0; border-top:1px solid var(--rule)}
+  .talk:last-child{border-bottom:1px solid var(--rule)}
+  .talk .when{display:block; color:var(--ink-2); font-size:.92rem}
+
+  .small{font-size:.9rem}
+  .pubs{list-style:none; padding:0; margin:0}
+  .pubs li{padding:12px 0; border-top:1px solid var(--rule)}
+  .pubs li:last-child{border-bottom:1px solid var(--rule)}
+  .pubs .t{display:block}
+  .pubs .t a{border:0; color:var(--ink)}
+  .pubs .t a:hover{color:var(--teal)}
+  .pubs .m{color:var(--ink-2); font-size:.9rem}
+  .pubs .m a{margin-right:12px}
+  .pubs .yr{color:var(--ink-2); font-size:.9rem; margin-left:8px}
+  dd .gh{display:block; color:var(--ink-2); font-size:.85rem; margin-top:4px}
+  dd .gh a{margin-right:12px}
+  .contact a{margin-right:20px}
+
+  @media (max-width:760px){
+    .page{grid-template-columns:minmax(0,1fr); gap:28px; padding:32px 20px 72px}
+    nav{position:static}
+    nav ul{display:flex; flex-wrap:wrap; gap:4px 18px}
+    nav .ext{display:flex; gap:18px; margin-top:16px; padding-top:14px}
+    dl div{grid-template-columns:1fr; gap:4px}
+    h1{font-size:1.65rem}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav aria-label="Site">
+  <p class="name">Kyle Beyer</p>
+  <p class="aff">Postdoctoral researcher<br>Facility for Rare Isotope Beams<br>Michigan State University<br>BAND collaboration</p>
+  <ul>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#software">Software</a></li>
+    <li><a href="#talks">Talks</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="ext">
+    <a href="#" data-link="github">GitHub</a>
+    <a href="#" data-link="orcid">ORCID</a>
+    <a href="#" data-link="scholar">Google Scholar</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="top">
+  <h1> Connecting theoretical models to reality  </h1>
+
+  <figure class="hero">
+    <video id="hero-video" autoplay muted loop playsinline preload="metadata" poster="media/reaction_zoom_poster.jpg"
+           aria-label="Animation: a proton scatters elastically off a target seen at nine scales, from quarks and gluons through nuclear matter, the shell model, a vibrating fluid drop and a deformed rotor.">
+      <source src="media/reaction_zoom.mp4" type="video/mp4">
+      <source src="media/reaction_zoom.webm" type="video/webm">
+    </video>
+  </figure>
+
+  <p class="lede">
+  I am a computational physicist and postdoc at the Facility for Rare Isotope Beams, in the <a href="https://bandframework.github.io/">Bayesian Analysis of Nuclear Dynamics (BAND)</a> collaboration and the <a href="https://sites.google.com/view/frib-few-body-reaction-group/">Few-Body Reaction Theory group</a>. I am interested in connecting ideas across fields to answer big scientific questions: how can we describe nuclear reaction dynamics across resolution scales from first
+  principles? How can we take all sources of uncertainty into account, including theoretical, when inferring natural properties from experiment?
+  </p>
+  <p>
+  Addressing these questions often involves reduced-order and surrogate models, Bayesian model calibration, machine learning and AI, high-performance computing, and ideas and tools from across theoretical and experimental physics. </p>
+  <p>
+  I did my PhD (2024) in Nuclear Engineering and Radiological Sciences at the University of Michigan, and have had the opportunity to work across fields and laboratories, including LANL, LLNL, PNNL, and CERN.</p>
+</section>
+
+
+<section id="publications">
+  <h2>Publications</h2>
+  <p class="muted" id="pub-status">Loading publications…</p>
+  <ol class="pubs" id="pub-list"></ol>
+  <p class="muted small"><a id="pub-orcid-link" href="#">ORCID record</a>; <a id="pub-scholar-link" href="#">Google Scholar</a>.</p>
+</section>
+
+<section id="software">
+  <h2>Software</h2>
+  <dl id="repo-list">
+    <div>
+      <dt><code>jitr</code></dt>
+      <dd>GPU-accelerated, just-in-time compiled (JAX) direct nuclear reaction solver toolkit built on the calculable R-matrix method.</dd>
+    </div>
+    <div>
+      <dt><code>cosmo_gpu</code></dt>
+      <dd>GPU (CUDA/CuPy) accelerated block-Lanczos backend for the CoSMo shell-model eigensolver.</dd>
+    </div>
+    <div>
+      <dt><code>rxmc</code></dt>
+      <dd>Orchestration layer for hierarchical Bayesian modeling of nuclear reactions.</dd>
+    </div>
+    <div>
+      <dt><code>black-box-bayes</code></dt>
+      <dd>Driver layer for open-source samplers used in Bayesian model calibration.</dd>
+    </div>
+    <div>
+      <dt><code>exfor_tools</code></dt>
+      <dd>Toolkit for parsing and cleaning experimental data from EXFOR for model training.</dd>
+    </div>
+    <div>
+      <dt><code>nook</code></dt>
+      <dd>Nuclear structure data from ENSDF and RIPL-3. <span class="gh"><a href="https://beykyle.github.io/nook/">Documentation</a></span></dd>
+    </div>
+    <div>
+      <dt><code>ROSE</code></dt>
+      <dd>Reduced-basis surrogate/emulator toolkit for elastic scattering. <span class="gh"><a href="https://github.com/bandframework/rose">bandframework/rose</a></span></dd>
+    </div>
+    <div>
+      <dt><code>Bfrescox</code></dt>
+      <dd>Python wrapper for the Frescox coupled-reaction-channels code. <span class="gh"><a href="https://github.com/bandframework/Bfrescox">bandframework/Bfrescox</a></span></dd>
+    </div>
+    <div>
+      <dt><code>breakup-calibration-demo</code></dt>
+      <dd>Emulates Frescox CDCC calculations with surmise and Bfrescox to infer the <sup>8</sup>B asymptotic normalization coefficient from breakup cross sections.</dd>
+    </div>
+  </dl>
+  <p class="muted small">ROSE, Bfrescox and breakup-calibration-demo are part of the <a href="https://github.com/bandframework/bandframework">BAND framework</a>.</p>
+</section>
+
+<section id="talks">
+  <h2>Selected talks</h2>
+  <div class="talk">“Consistent description of nuclear reactions and structure with quantified uncertainties.” <span class="when">FRIB Seminar, East Lansing, MI, December 2026</span></div>
+  <div class="talk">“Microscopic nuclear reaction theory across energy scales.” <span class="when">FRIB Theory Seminar, East Lansing, MI, November 2026</span></div>
+  <div class="talk">“Bayesian model calibration for nuclear reactions.” <span class="when">UCL workshop on predictively oriented posteriors, London (virtual), November 2026</span></div>
+  <div class="talk">“Towards consistent, predictive, and uncertainty-quantified nuclear reaction theory.” <span class="when">T-2 Colloquium, Los Alamos, NM, October 2026</span></div>
+  <div class="talk">“BAND tools for nuclear reactions: inferring astrophysical quantities from the breakup of halo nuclei.” <span class="when"><a href="https://conferences.lbl.gov/event/2526/">ISNET-12</a>, Berkeley, CA, October 2026</span></div>
+  <div class="talk">“Calibrating an optical model using BAND tools.” <span class="when"><a href="https://conferences.lbl.gov/event/2526/page/332-band-camp-monday-october-5">BAND Camp</a>, ISNET-12, Berkeley, CA, October 2026</span></div>
+  <div class="talk">“Bayesian and post-Bayesian model calibration for nuclear reactions.” <span class="when">International Atomic Energy Agency, Vienna, July 2026</span></div>
+  <div class="talk">“Dealing with uncertainties in modeling nuclear reactions.” <span class="when">SIAM Conference on Uncertainty Quantification (UQ26), Minneapolis, MN, March 2026</span></div>
+  <div class="talk"><a href="https://indico.bnl.gov/event/29405/contributions/114773/">“The BAND approach to optical potentials.”</a> <span class="when">Cross Section Evaluation Working Group (CSEWG), Brookhaven, NY, January 2026</span></div>
+  <div class="talk">“The East Lansing Model: towards uncertainty quantified optical potentials for rare isotopes.” <span class="when"><a href="https://indico.ijclab.in2p3.fr/event/11979/">IJCLab Nuclear Theory Seminar</a>, Orsay, November 2025</span></div>
+  <div class="talk">“Bayesian calibration, uncertainty quantification, and extrapolation of nuclear reaction models.” <span class="when">ISNET-11, Trento, November 2025</span></div>
+  <div class="talk">“Fission: deformation to saddle to scission to fragments.” <span class="when">Nuclear Engineering Summer School (NESS), Ann Arbor, MI, 2023 and 2024</span></div>
+  <div class="talk">“Extending optical models to the fission fragment region.” <span class="when">T-2 Colloquium, Los Alamos, NM, December 2022</span></div>
+
+</section>
+
+<section id="contact" class="contact">
+  <h2>Contact</h2>
+  <p>Facility for Rare Isotope Beams, Michigan State University, East Lansing, MI.</p>
+  <p><a href="#" data-link="email">Email</a><a href="#" data-link="github">GitHub</a><a href="#" data-link="orcid">ORCID</a><a href="#" data-link="scholar">Google Scholar</a></p>
+</section>
+
+</main>
+</div>
+
+<script src="data/arxiv.js"></script>
+<script>
+  // ---------------------------------------------------------------
+  // Fill these in. Everything else on the page is driven from them.
+  // ---------------------------------------------------------------
+  const ME = {
+    github:  'beykyle',                 // GitHub username
+    orcid:   '0000-0002-2695-2478',
+    scholar: 'CfSDiQ8AAAAJ',
+    email:   'beyerk@frib.msu.edu',
+  };
+
+  // wire up profile links
+  const LINKS = {
+    github:  `https://github.com/${ME.github}`,
+    orcid:   `https://orcid.org/${ME.orcid}`,
+    scholar: `https://scholar.google.com/citations?user=${ME.scholar}`,
+    email:   `mailto:${ME.email}`,
+  };
+  document.querySelectorAll('[data-link]').forEach(a=>{ a.href = LINKS[a.dataset.link] || '#'; });
+  document.getElementById('pub-orcid-link').href = LINKS.orcid;
+  document.getElementById('pub-scholar-link').href = LINKS.scholar;
+
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  // ---------------- Publications from the ORCID public API ----------------
+  // Google Scholar has no API and blocks cross-origin requests, so the list
+  // comes from ORCID. Keep ORCID synced to Scholar/Crossref/arXiv (ORCID can
+  // auto-import from Crossref and arXiv once you link them in your record).
+  async function loadPublications(){
+    const status = document.getElementById('pub-status');
+    const list = document.getElementById('pub-list');
+    // match key: lowercase title, all non-alphanumerics removed ("Non-Affinely" == "nonaffinely")
+    const key = t => String(t || '').toLowerCase().replace(/<[^>]+>/g,'').replace(/[^a-z0-9]/g,'');
+    const normDoi = d => d ? String(d).toLowerCase().replace(/^https?:\/\/(dx\.)?doi\.org\//,'') : '';
+
+    const [orcidRes, arxivRes] = await Promise.allSettled([
+      fetch(`https://pub.orcid.org/v3.0/${ME.orcid}/works`, {headers:{Accept:'application/json'}})
+        .then(r => { if(!r.ok) throw new Error(`ORCID ${r.status}`); return r.json(); }),
+      // data/arxiv.js (window.ARXIV_PAPERS) is written nightly by scripts/fetch_arxiv.py
+      Array.isArray(window.ARXIV_PAPERS) ? Promise.resolve(window.ARXIV_PAPERS) : Promise.reject(new Error('no arXiv data')),
+    ]);
+    if(orcidRes.status === 'rejected' && arxivRes.status === 'rejected'){
+      status.innerHTML = `Couldn't load the publication list right now. See the <a href="${LINKS.orcid}">ORCID record</a> or <a href="${LINKS.scholar}">Google Scholar</a>.`;
+      return;
+    }
+
+    // ORCID works (journal articles with DOIs); each group may have several sources
+    const works = [];
+    const byKey = new Map(), byDoi = new Map();
+    const add = w => { works.push(w); byKey.set(key(w.title), w); if(w.doi) byDoi.set(normDoi(w.doi), w); };
+    for(const g of (orcidRes.value?.group || [])){
+      const summaries = g['work-summary'] || [];
+      const s = summaries[0] || {};
+      const ids = {};
+      for(const ws of summaries){
+        for(const id of (ws['external-ids']?.['external-id'] || [])){
+          const t = (id['external-id-type'] || '').toLowerCase();
+          if(!ids[t]) ids[t] = id['external-id-value'];
+        }
+      }
+      const w = {
+        title: (t => t === t.toUpperCase() ? t.charAt(0) + t.slice(1).toLowerCase() : t)(s.title?.title?.value || 'Untitled'),
+        journal: (s['journal-title']?.value || '').replace(/&amp;/g,'&'),
+        year: s['publication-date']?.year?.value || '',
+        month: s['publication-date']?.month?.value || '',
+        url: s.url?.value || '',
+        doi: ids.doi, arxiv: ids.arxiv ? ids.arxiv.replace(/^arxiv:/i,'') : null,
+      };
+      const prev = byKey.get(key(w.title)) || (w.doi && byDoi.get(normDoi(w.doi)));
+      if(prev){ prev.doi ??= w.doi; prev.arxiv ??= w.arxiv; if(!prev.journal) prev.journal = w.journal; if(!prev.year) prev.year = w.year; continue; }
+      add(w);
+    }
+
+    // arXiv papers: attach to the matching published work, otherwise list as a preprint
+    const preprints = [];
+    for(const p of (arxivRes.value || [])){
+      const match = byKey.get(key(p.title)) || (p.doi && byDoi.get(normDoi(p.doi)));
+      if(match){ match.arxiv ??= p.id; continue; }
+      if(p.doi){ add({title:p.title, journal:p.journal_ref, year:p.published.slice(0,4), month:p.published.slice(5,7), doi:p.doi, arxiv:p.id}); continue; }
+      preprints.push({title:p.title, journal:'Preprint', year:p.published.slice(0,4), month:p.published.slice(5,7), published:p.published, arxiv:p.id});
+    }
+    preprints.sort((a,b)=> b.published.localeCompare(a.published));
+    const dated = works.sort((a,b)=> (b.year+String(b.month).padStart(2,'0')).localeCompare(a.year+String(a.month).padStart(2,'0')));
+    const pubs = [...preprints, ...dated];
+    if(!pubs.length){ status.textContent = 'No publications are listed yet.'; return; }
+
+    list.innerHTML = pubs.map(w => {
+      const primary = w.arxiv && !w.doi ? `https://arxiv.org/abs/${w.arxiv}` : w.doi ? `https://doi.org/${w.doi}` : w.url;
+      const links = [];
+      if(w.arxiv) links.push(`<a href="https://arxiv.org/abs/${esc(w.arxiv)}">arXiv:${esc(w.arxiv)}</a>`);
+      if(w.doi)   links.push(`<a href="https://doi.org/${esc(w.doi)}">doi:${esc(w.doi)}</a>`);
+      return `<li>
+        <span class="t">${primary ? `<a href="${esc(primary)}">${esc(w.title)}</a>` : esc(w.title)}<span class="yr">${esc(w.year)}</span></span>
+        <span class="m">${w.journal ? esc(w.journal)+'. ' : ''}${links.join('')}</span>
+      </li>`;
+    }).join('');
+    status.remove();
+  }
+
+  // ---------------- Repositories from the GitHub API ----------------
+  async function loadRepos(){
+    try{
+      const r = await fetch(`https://api.github.com/users/${ME.github}/repos?per_page=100&sort=pushed`);
+      if(!r.ok) return;
+      const repos = await r.json();
+      const fmt = d => new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'short'});
+      for(const dt of document.querySelectorAll('#repo-list dt code')){
+        const repo = repos.find(x => x.name.toLowerCase() === dt.textContent.trim().toLowerCase());
+        if(!repo) continue;
+        const dd = dt.closest('div').querySelector('dd');
+        dd.insertAdjacentHTML('beforeend', `<span class="gh"><a href="${esc(repo.html_url)}">${esc(repo.full_name)}</a>${repo.language ? esc(repo.language)+', ' : ''}last push ${fmt(repo.pushed_at)}</span>`);
+      }
+    }catch(e){ /* annotations are optional */ }
+  }
+
+  // hero film: no autoplay for visitors who prefer reduced motion
+  const hero = document.getElementById('hero-video');
+  const rm = matchMedia('(prefers-reduced-motion: reduce)');
+  if(hero && rm.matches){ hero.removeAttribute('autoplay'); hero.pause(); hero.controls = true; }
+
+  loadPublications();
+  loadRepos();
+
+  // highlight the section in view in the side nav
+  const links=[...document.querySelectorAll('nav ul a')];
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){
+      links.forEach(l=>l.removeAttribute('aria-current'));
+      const l=links.find(l=>l.getAttribute('href')==='#'+e.target.id);
+      if(l) l.setAttribute('aria-current','true');
+    }});
+  },{rootMargin:'-40% 0px -55% 0px'});
+  document.querySelectorAll('main section[id]').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
