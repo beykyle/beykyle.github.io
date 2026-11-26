@@ -26,7 +26,7 @@ window.ARXIV_PAPERS = [
    "Lee Morgan"
   ],
   "published": "2026-09-17",
-  "updated": "2026-09-17",
+  "updated": "2026-11-25",
   "doi": "",
   "journal_ref": ""
  },
